@@ -1,0 +1,33 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    container:
+      image: ecoding/php:8.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Prepare
+        run: |
+          composer install
+
+      - name: Lint
+        run: |
+          ./vendor/bin/phpcs --standard=PSR12 src/ tests/
+
+      - name: Test
+        run: |
+          XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-clover coverage.xml --coverage-filter src/ tests/
+
+      - name: codecov
+        uses: codecov/codecov-action@v1

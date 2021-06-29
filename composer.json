@@ -1,0 +1,33 @@
+{
+    "name": "sinkcup/confluence-sdk-php",
+    "description": "Confluence SDK PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "sinkcup",
+            "homepage": "https://github.com/sinkcup",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Confluence\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Confluence\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.3",
+        "php": ">=8.0"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "^1.5",
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.6"
+    }
+}
