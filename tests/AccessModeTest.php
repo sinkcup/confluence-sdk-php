@@ -12,7 +12,7 @@ class AccessModeTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->api = new AccessMode();
+        $this->api = new AccessMode($this->conf);
     }
 
     public function testIndexFailed()

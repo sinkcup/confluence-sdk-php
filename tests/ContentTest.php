@@ -13,7 +13,7 @@ class ContentTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->api = new Content();
+        $this->api = new Content($this->conf);
         $this->id = $this->faker->randomNumber();
     }
 
