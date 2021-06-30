@@ -11,7 +11,7 @@ class ContentChildTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->api = new ContentChild();
+        $this->api = new ContentChild($this->conf);
     }
 
     public function testIndex()

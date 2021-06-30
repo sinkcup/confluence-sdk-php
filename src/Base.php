@@ -2,6 +2,7 @@
 
 namespace Confluence;
 
+use ArgumentCountError;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -9,10 +10,10 @@ class Base
 {
     protected mixed $client;
 
-    protected array $conf = array(
+    protected array $conf = [
         'root_uri' => 'http://localhost:8090/confluence/rest/api/',
-        'timeout' => 3.0,
-    );
+        'auth' => ['admin', '123456'],
+    ];
 
     protected string $uriPrefix = '';
 
@@ -20,15 +21,16 @@ class Base
 
     public function __construct(array $conf = [], $client = null)
     {
+        foreach (array_keys($this->conf) as $key) {
+            if (!isset($conf[$key]) || empty($conf[$key])) {
+                throw new ArgumentCountError("need: $key");
+            }
+        }
         $this->conf = array_merge($this->conf, $conf);
+        $this->conf['base_uri'] = $this->conf['root_uri'] . $this->uriPrefix;
+        unset($this->conf['root_uri']);
         if (empty($client)) {
-            $this->client = new Client([
-                'base_uri' => $this->conf['root_uri'] . $this->uriPrefix,
-                'timeout' => $this->conf['timeout'],
-                'headers' => [
-                    // TODO
-                ],
-            ]);
+            $this->client = new Client($this->conf);
         } else {
             $this->client = $client;
         }
@@ -52,7 +54,22 @@ class Base
                 $options = ['json' => $params];
             }
         }
-        $response = $this->client->request($method, $path, $options);
+        try {
+            $response = $this->client->request($method, $path, $options);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $code = $e->getResponse()->getStatusCode();
+                $message = match ($code) {
+                    401 => $e->getResponse()->getHeader('X-Seraph-LoginReason'),
+                    default => $e->getMessage(),
+                };
+                throw new Exception($message, $code);
+            } else {
+                throw new Exception($e->getMessage(), $e->getCode());
+            }
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
         return json_decode($response->getBody(), true);
     }
 
