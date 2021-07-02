@@ -15,30 +15,29 @@ class AccessModeTest extends TestCase
         $this->api = new AccessMode($this->conf);
     }
 
-    public function testIndexFailed()
+    public function testShowFailed()
     {
         try {
-            $this->api->index();
+            $this->api->show(1);
         } catch (Exception $e) {
             $this->assertEquals(Exception::$codeStr2Num['MethodNotAllowed'], $e->getCode());
         }
     }
 
-    public function testShow()
+    public function testIndex()
     {
         $data = [ 'foo' => 'bar' ];
-        $id = $this->faker->randomNumber();
         $clientMock = $this->getMockBuilder(Client::class)->getMock();
         $clientMock->expects($this->once())
             ->method('request')
             ->with(
                 'GET',
-                $id
+                "accessmode"
             )
             ->willReturn(new Response(200, [], json_encode($data)));
         $this->api->setClient($clientMock);
 
-        $r = $this->api->show($id);
+        $r = $this->api->index();
         $this->assertEquals($data, $r);
     }
 }

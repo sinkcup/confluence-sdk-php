@@ -24,7 +24,7 @@ class AuthTest extends TestCase
             ->method('request')
             ->with(
                 'GET',
-                ''
+                'content'
             )
             ->willReturn(new Response(401, [
                 'X-Seraph-LoginReason' => 'AUTHENTICATED_FAILED',
@@ -45,7 +45,7 @@ class AuthTest extends TestCase
         $this->expectExceptionMessage('need: auth');
         $this->expectException(ArgumentCountError::class);
         $this->api = new Content([
-            'root_uri' => $this->faker->url,
+            'base_uri' => $this->faker->url,
         ]);
     }
 }

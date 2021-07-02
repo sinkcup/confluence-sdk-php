@@ -11,11 +11,11 @@ class Base
     protected mixed $client;
 
     protected array $conf = [
-        'root_uri' => 'http://localhost:8090/confluence/rest/api/',
+        'base_uri' => 'http://localhost:8090/confluence/rest/api/',
         'auth' => ['admin', '123456'],
     ];
 
-    protected string $uriPrefix = '';
+    protected string $resourceUri = '';
 
     protected array $apis = [];
 
@@ -27,8 +27,6 @@ class Base
             }
         }
         $this->conf = array_merge($this->conf, $conf);
-        $this->conf['base_uri'] = $this->conf['root_uri'] . $this->uriPrefix;
-        unset($this->conf['root_uri']);
         if (empty($client)) {
             $this->client = new Client($this->conf);
         } else {
@@ -45,6 +43,9 @@ class Base
     {
         if (!in_array(debug_backtrace()[1]['function'], $this->apis)) {
             throw new Exception('Method Not Allowed', Exception::$codeStr2Num['MethodNotAllowed']);
+        }
+        if (str_contains($this->resourceUri, '{')) {
+            throw new Exception('Bad Uri', Exception::$codeStr2Num['BadUri']);
         }
         $options = [];
         if (!empty($params)) {
@@ -80,7 +81,7 @@ class Base
      */
     public function destroy($id, $params = [])
     {
-        return $this->requestApi('DELETE', $id, $params);
+        return $this->requestApi('DELETE', $this->resourceUri . "/${id}", $params);
     }
 
     /**
@@ -91,7 +92,22 @@ class Base
      */
     public function index(array $params = [])
     {
-        return $this->requestApi('GET', '', $params);
+        return $this->requestApi('GET', $this->resourceUri, $params);
+    }
+
+    /**
+     * replace variable in uri
+     *
+     */
+    public function prepare(array $data = []): static
+    {
+        if (empty($data) || !str_contains($this->resourceUri, '{')) {
+            return $this;
+        }
+        foreach($data as $key => $value) {
+            $this->resourceUri = str_replace('{' . $key . '}', $value, $this->resourceUri);
+        }
+        return $this;
     }
 
     /**
@@ -102,7 +118,7 @@ class Base
      */
     public function show(int $id, array $params = [])
     {
-        return $this->requestApi('GET', $id, $params);
+        return $this->requestApi('GET', $this->resourceUri . "/${id}", $params);
     }
 
     /**
@@ -116,7 +132,7 @@ class Base
      */
     public function store(array $params)
     {
-        return $this->requestApi('POST', '', $params);
+        return $this->requestApi('POST', $this->resourceUri, $params);
     }
 
     /**
@@ -125,6 +141,6 @@ class Base
      */
     public function update($id, array $params)
     {
-        return $this->requestApi('PUT', $id, $params);
+        return $this->requestApi('PUT', $this->resourceUri . "/${id}", $params);
     }
 }

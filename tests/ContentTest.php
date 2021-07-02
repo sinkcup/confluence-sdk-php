@@ -25,7 +25,7 @@ class ContentTest extends TestCase
             ->method('request')
             ->with(
                 'DELETE',
-                $this->id,
+                "content/{$this->id}",
                 ['query' => $params]
             )
             ->willReturn(new Response(200, []));
@@ -313,7 +313,7 @@ class ContentTest extends TestCase
             ->method('request')
             ->with(
                 'GET',
-                '',
+                'content',
                 ['query' => $params]
             )
             ->willReturn(new Response(200, [], json_encode($data)));
@@ -378,7 +378,7 @@ class ContentTest extends TestCase
             ->method('request')
             ->with(
                 'GET',
-                $this->id
+                "content/{$this->id}"
             )
             ->willReturn(new Response(200, [], json_encode($data)));
         $this->api->setClient($clientMock);
@@ -408,7 +408,7 @@ class ContentTest extends TestCase
             ->method('request')
             ->with(
                 'POST',
-                '',
+                'content',
                 ['json' => $data]
             )
             ->willReturn(new Response(200, [], '{
@@ -537,7 +537,7 @@ class ContentTest extends TestCase
             ->method('request')
             ->with(
                 'PUT',
-                $this->id,
+                "content/{$this->id}",
                 ['json' => $data]
             )
             ->willReturn(new Response(200, [], '{
