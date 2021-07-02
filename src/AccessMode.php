@@ -4,9 +4,9 @@ namespace Confluence;
 
 class AccessMode extends Base
 {
-    protected string $uriPrefix = 'accessmode';
+    protected string $resourceUri = 'accessmode';
 
     protected array $apis = [
-        'show',
+        'index',
     ];
 }

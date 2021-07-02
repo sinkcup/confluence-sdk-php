@@ -18,7 +18,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
         $this->faker = Faker\Factory::create();
         $this->conf = [
-            'root_uri' => $this->faker->url,
+            'base_uri' => $this->faker->url,
             'auth' => [$this->faker->userName, $this->faker->password],
         ];
     }

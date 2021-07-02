@@ -4,7 +4,7 @@ namespace Confluence;
 
 class Content extends Base
 {
-    protected string $uriPrefix = 'content';
+    protected string $resourceUri = 'content';
 
     protected array $apis = [
         'destroy',

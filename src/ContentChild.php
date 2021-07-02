@@ -4,7 +4,7 @@ namespace Confluence;
 
 class ContentChild extends Base
 {
-    protected string $uriPrefix = 'content/{content_id}/child';
+    protected string $resourceUri = 'content/{content_id}/child';
 
     protected array $apis = [
         'index',
