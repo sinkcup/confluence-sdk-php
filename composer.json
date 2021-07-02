@@ -21,9 +21,9 @@
         }
     },
     "require": {
+        "php": ">=8.0",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "^7.3",
-        "php": ">=8.0"
+        "guzzlehttp/guzzle": "^7.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.14",
