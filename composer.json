@@ -29,5 +29,10 @@
         "fakerphp/faker": "^1.14",
         "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "^3.6"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php -r \"if (is_dir('.git/hooks/')) {copy('.git-pre-commit', '.git/hooks/pre-commit'); chmod('.git/hooks/pre-commit', 0755);}\""
+        ]
     }
 }
