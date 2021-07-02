@@ -104,7 +104,7 @@ class Base
         if (empty($data) || !str_contains($this->resourceUri, '{')) {
             return $this;
         }
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             $this->resourceUri = str_replace('{' . $key . '}', $value, $this->resourceUri);
         }
         return $this;
